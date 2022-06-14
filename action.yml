@@ -1,0 +1,18 @@
+name: "Gitemoji Checker"
+description: "Checks if the PR Title follows guidelines."
+branding:
+  icon: "tag"
+  color: "purple"
+on: [pull_request]
+inputs:
+  GITHUB_TOKEN:
+    required: false
+  pass_on_octokit_error:
+    description: "force CI to pass if an octokit error (e.g. missing GITHUB_TOKEN) occurs"
+    default: false
+  configuration_path:
+    description: "config file path"
+    default: ".github/gitemoji-checker-config.json"
+runs:
+  using: "node16"
+  main: "dist/index.js"
