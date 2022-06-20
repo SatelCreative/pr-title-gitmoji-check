@@ -10,9 +10,7 @@ inputs:
   pass_on_octokit_error:
     description: "force CI to pass if an octokit error (e.g. missing GITHUB_TOKEN) occurs"
     default: false
-  configuration_path:
-    description: "config file path"
-    default: ".github/gitemoji-checker-config.json"
+
 runs:
   using: "node16"
   main: "dist/index.js"
