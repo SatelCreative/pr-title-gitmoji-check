@@ -5,6 +5,7 @@ const issue_number = github.context.issue.number;
 const configPath = process.env.INPUT_CONFIGURATION_PATH;
 const passOnOctokitError = process.env.INPUT_PASS_ON_OCTOKIT_ERROR === "true";
 const { Octokit } = require("@octokit/action");
+var config = require("./pr-title-checker-config.json")
 
 let octokit;
 
@@ -14,14 +15,7 @@ async function run() {
     const title = github.context.payload.pull_request.title;
     const labels = github.context.payload.pull_request.labels;
 
-    let config;
-    try {
-      config = await getJSON(configPath);
-    } catch (e) {
-      core.setFailed(`Couldn't retrieve the config file specified - ${e}`);
-      return;
-    }
-    let { CHECKS, LABEL, MESSAGES } = JSON.parse(config);
+    let { CHECKS, LABEL, MESSAGES } = JSON.parse(JSON.stringify(config));
     LABEL.name = LABEL.name || "Gitemoji missing";
     LABEL.color = LABEL.color || "eee";
     CHECKS.ignoreLabels = CHECKS.ignoreLabels || [];
@@ -30,12 +24,13 @@ async function run() {
     MESSAGES.failure = MESSAGES.failure || "Failing CI test";
     MESSAGES.notice = MESSAGES.notice || "";
 
-    if(title.toLowerCase().includes("feature")){
-      pullRequest.title =  '🎉' + pullRequest.title
-    }
-    if(title.toLowerCase().includes("fix")){
-      pullRequest.title =  '🐛' + pullRequest.title
-    }
+    //TODO
+    // if(title.toLowerCase().includes("feature")){
+    //   pullRequest.title =  '🎉' + pullRequest.title
+    // }
+    // if(title.toLowerCase().includes("fix")){
+    //   pullRequest.title =  '🐛' + pullRequest.title
+    // }
 
     for (let i = 0; i < labels.length; i++) {
       for (let j = 0; j < CHECKS.ignoreLabels.length; j++) {
