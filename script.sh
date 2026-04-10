@@ -5,9 +5,10 @@ set -uo pipefail
 CONFIG_PATH="${GITHUB_ACTION_PATH}/pr-title-checker-config.json"
 EVENT_PATH="${GITHUB_EVENT_PATH}"
 PASS_ON_ERROR="${INPUT_PASS_ON_OCTOKIT_ERROR:-false}"
+TOKEN="${GH_TOKEN:-${GITHUB_TOKEN:-}}"
+API_BASE="${GITHUB_API_URL:-https://api.github.com}"
 
-# Verify GitHub token is available
-if [ -z "${GH_TOKEN:-}" ] && [ -z "${GITHUB_TOKEN:-}" ]; then
+if [ -z "$TOKEN" ]; then
   echo "API Error - no GitHub token provided"
   if [ "$PASS_ON_ERROR" = "true" ]; then
     echo "Passing CI regardless"
@@ -17,6 +18,17 @@ if [ -z "${GH_TOKEN:-}" ] && [ -z "${GITHUB_TOKEN:-}" ]; then
     exit 1
   fi
 fi
+
+api() {
+  local method="$1" endpoint="$2"
+  shift 2
+  curl -s -X "$method" \
+    -H "Authorization: Bearer ${TOKEN}" \
+    -H "Accept: application/vnd.github+json" \
+    -H "X-GitHub-Api-Version: 2022-11-28" \
+    "$@" \
+    "${API_BASE}${endpoint}"
+}
 
 PR_TITLE=$(jq -r '.pull_request.title' "$EVENT_PATH")
 PR_NUMBER=$(jq -r '.pull_request.number' "$EVENT_PATH")
@@ -30,10 +42,16 @@ NOTICE_MSG=$(jq -r '.MESSAGES.notice // ""' "$CONFIG_PATH")
 
 add_label() {
   echo "Adding label ($1) to PR..."
-  if gh pr edit "$PR_NUMBER" --add-label "$1" -R "$GITHUB_REPOSITORY"; then
-    echo "Added label ($1) to PR"
+  local body
+  body=$(jq -n --arg label "$1" '{"labels":[$label]}')
+  local status
+  status=$(api POST "/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/labels" \
+    -o /dev/null -w "%{http_code}" \
+    -d "$body")
+  if [ "$status" -ge 200 ] && [ "$status" -lt 300 ]; then
+    echo "Added label ($1) to PR - ${status}"
   else
-    echo "Failed to add label ($1) to PR"
+    echo "Failed to add label ($1) to PR - ${status}"
   fi
 }
 
@@ -49,17 +67,28 @@ remove_label() {
   fi
 
   echo "No formatting necessary. Removing label..."
-  if gh pr edit "$PR_NUMBER" --remove-label "$1" -R "$GITHUB_REPOSITORY"; then
-    echo "Removed label"
+  local encoded_name
+  encoded_name=$(printf '%s' "$1" | jq -sRr @uri)
+  local status
+  status=$(api DELETE "/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/labels/${encoded_name}" \
+    -o /dev/null -w "%{http_code}")
+  if [ "$status" -ge 200 ] && [ "$status" -lt 300 ]; then
+    echo "Removed label - ${status}"
   else
-    echo "Failed to remove label ($1) from PR"
+    echo "Failed to remove label ($1) from PR - ${status}"
   fi
 }
 
 ensure_label_exists() {
   echo "Creating label ($1)..."
-  if gh label create "$1" --color "$2" -R "$GITHUB_REPOSITORY" 2>/dev/null; then
-    echo "Created label ($1)"
+  local body
+  body=$(jq -n --arg name "$1" --arg color "$2" '{"name":$name,"color":$color}')
+  local status
+  status=$(api POST "/repos/${GITHUB_REPOSITORY}/labels" \
+    -o /dev/null -w "%{http_code}" \
+    -d "$body")
+  if [ "$status" -ge 200 ] && [ "$status" -lt 300 ]; then
+    echo "Created label ($1) - ${status}"
   else
     echo "Label ($1) already created."
   fi
