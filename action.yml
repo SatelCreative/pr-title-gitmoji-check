@@ -3,14 +3,21 @@ description: "Checks if the PR Title follows guidelines."
 branding:
   icon: "tag"
   color: "purple"
-on: [pull_request]
 inputs:
   GITHUB_TOKEN:
+    description: "GitHub token for API calls"
     required: false
+    default: ${{ github.token }}
   pass_on_octokit_error:
-    description: "force CI to pass if an octokit error (e.g. missing GITHUB_TOKEN) occurs"
-    default: false
+    description: "force CI to pass if an API error (e.g. missing GITHUB_TOKEN) occurs"
+    default: "false"
 
 runs:
-  using: "node20"
-  main: "dist/index.js"
+  using: "composite"
+  steps:
+    - name: Check PR Title for Gitmoji
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+        INPUT_PASS_ON_OCTOKIT_ERROR: ${{ inputs.pass_on_octokit_error }}
+      run: ${{ github.action_path }}/script.sh
