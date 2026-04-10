@@ -43,7 +43,7 @@ NOTICE_MSG=$(jq -r '.MESSAGES.notice // ""' "$CONFIG_PATH")
 add_label() {
   echo "Adding label ($1) to PR..."
   local body
-  body=$(jq -n --arg label "$1" '{"labels":[$label]}')
+  body=$(jq -n --arg lbl "$1" '{"labels":[$lbl]}')
   local status
   status=$(api POST "/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/labels" \
     -o /dev/null -w "%{http_code}" \
