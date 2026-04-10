@@ -25,7 +25,7 @@ api() {
   curl -s -X "$method" \
     -H "Authorization: Bearer ${TOKEN}" \
     -H "Accept: application/vnd.github+json" \
-    -H "X-GitHub-Api-Version: 2022-11-28" \
+    -H "X-GitHub-Api-Version: 2026-03-10" \
     "$@" \
     "${API_BASE}${endpoint}"
 }
