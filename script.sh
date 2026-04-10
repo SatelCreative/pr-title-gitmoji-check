@@ -30,7 +30,7 @@ api() {
     "${API_BASE}${endpoint}"
 }
 
-PR_TITLE=$(jq -r '.pull_request.title' "$EVENT_PATH")
+PR_TITLE=$(jq -r '.pull_request.title | sub("^\\s+"; "") | sub("\\s+$"; "")' "$EVENT_PATH")
 PR_NUMBER=$(jq -r '.pull_request.number' "$EVENT_PATH")
 
 LABEL_NAME=$(jq -r '.LABEL.name // "Gitmoji missing"' "$CONFIG_PATH")
