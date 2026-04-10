@@ -107,7 +107,7 @@ ensure_label_exists "$LABEL_NAME" "$LABEL_COLOR"
 # Check title against allowed prefixes
 PREFIX_MATCH=$(jq -r \
   --arg title "$PR_TITLE" \
-  '.CHECKS.prefixes // [] | map(select($title | startswith(.))) |
+  '.CHECKS.prefixes // [] | map(. as $p | select($title | startswith($p))) |
    if length > 0 then "true" else "false" end' \
   "$CONFIG_PATH")
 
