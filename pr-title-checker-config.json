@@ -5,7 +5,7 @@
     },
     "CHECKS": {
 		"prefixes": ["🎉", ":tada:", "🔖", ":bookmark:", "👥", ":busts_in_silhouette:", "📄", ":page_facing_up:", "✨", ":sparkles:", "👽️", ":alien:",
-			"🚚", ":truck:", "🏗️", ":building_construction:", "🔧", ":wrench:", "🔨", ":hammer:", "💥", ":boom:", "💥", ":collision:", "🗃️", ":card_file_box:",
+			"🚚", ":truck:", "🏗️", ":building_construction:", "🔧", ":wrench:", "🔨", ":hammer:", "💥", ":boom:", "🗃️", ":card_file_box:",
 			"👔", ":necktie:", "🛂", ":passport_control:", "🐛", ":bug:", "🚑️", ":ambulance:", "🚨", ":rotating_light:", "✏️", ":pencil2:",
 			"🔒️", ":lock:", "🩹", ":adhesive_bandage:", "➕", ":heavy_plus_sign:", "➖", ":heavy_minus_sign:", "⬇️", ":arrow_down:",
 			"⬆️", ":arrow_up:", "📌", ":pushpin:", "🎨", ":art:", "⚡", ":zap:", "♻️", ":recycle:", "🔥", ":fire:", "⚰️", ":coffin:",
@@ -13,8 +13,11 @@
 			"📱", ":iphone:", "🍱", ":bento:", "♿️", ":wheelchair:", "💄", ":lipstick:", "💫", ":dizzy:", "👷", ":construction_worker:",
 			"💚", ":green_heart:", "🚀", ":rocket:", "🩺", ":stethoscope:", "🧱", ":bricks:", "🙈", ":see_no_evil:", "⏪️", ":rewind:",
 			"🔀", ":twisted_rightwards_arrows:", "📝", ":memo:", "✅", ":white_check_mark:", "🌐", ":globe_with_meridians:",
-			"💬", ":speech_balloon:", "🔊", ":loud_sound:", "🔇", ":mute:", "🏷️", ":label:", "🧪", ":test_tube", "📈", ":chart_with_upwards_trend:",
-			"🧐", ":monocle_face:", "🌱", ":seedling:"],
+			"💬", ":speech_balloon:", "🔊", ":loud_sound:", "🔇", ":mute:", "🏷️", ":label:", "🧪", ":test_tube:", "📈", ":chart_with_upwards_trend:",
+			"🧐", ":monocle_face:", "🌱", ":seedling:",
+			"🚧", ":construction:", "🔐", ":closed_lock_with_key:", "📦️", ":package:", "🍻", ":beers:", "💩", ":poop:",
+			"📸", ":camera_flash:", "⚗️", ":alembic:", "🔍️", ":mag:", "🚩", ":triangular_flag_on_post:", "💸", ":money_with_wings:",
+			"🧵", ":thread:", "🦺", ":safety_vest:", "🤡", ":clown_face:", "🥚", ":egg:"],
 		"ignoreLabels": [" "]
 	},
 	"MESSAGES": {
